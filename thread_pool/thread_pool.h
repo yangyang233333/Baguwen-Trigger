@@ -62,14 +62,14 @@ public:
 
     // 添加任务：生产任务
     void add_task(const Task &task) {
+        std::unique_lock<std::mutex> lock(mu);
         if (shutdown) {
             return;
         }
-        std::unique_lock<std::mutex> lock(mu);
         // 如果任务队列已满，则挂起当前线程，等待不满的时候被唤醒
         while (task_queue.size() == max_task_queue_len_ && !shutdown) {
             full_task.wait(lock); // 等待任务被消耗
-            if (shutdown) { // 唤醒后检查是否被关闭
+            if (shutdown) {          // 唤醒后检查是否被关闭
                 return;
             }
         }
@@ -115,6 +115,8 @@ public:
 
         task_queue.clear();
         work_threads.clear();
+
+        std::cout << "destroy()." << std::endl;
     }
 };
 

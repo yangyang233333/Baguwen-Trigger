@@ -5,20 +5,25 @@
 #include <ctime>
 #include <bits/stdc++.h>
 #include <unistd.h>
-class Blob {
-public:
-    ~Blob() {
-        std::cout << "~Blob" << std::endl;
-    }
-};
 
-void func() {
-    Blob b{};
-    std::cout << "------------" << std::endl;
+void *handler(void *args) {
+    int a = *(int *) args;
+    std::cout << "a*a=" << a * a << std::endl;
+    return nullptr;
 }
 
 int main() {
-    std::thread t1(func);
+    ThreadPool pools(5, 10);
+    std::vector<int> datas = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    for (int &data: datas) {
+        pools.add_task(Task{handler, &data});
+    }
 
-    sleep(10);
+    sleep(3);
+    std::reverse(datas.begin(), datas.end());
+    for (int &data: datas) {
+        pools.add_task(Task{handler, &data});
+    }
+    sleep(3);
+    pools.destroy();
 }
