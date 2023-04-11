@@ -1,11 +1,12 @@
 package small_cache
 
 import (
+	"go.uber.org/zap"
 	"net/http"
 	"strings"
 )
 
-const defaultBasePath = "/small-cache/"
+const defaultBasePath = "small-cache"
 
 // HTTPPool 作为承载节点间 HTTP 通信的核心数据结构
 type HTTPPool struct {
@@ -29,7 +30,27 @@ func NewHTTPPool(self string) *HTTPPool {
 func (p *HTTPPool) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	segs := strings.Split(r.URL.Path, "/") // ["", basepath, groupname, key]
 	if len(segs) != 4 {
-
+		LogInstance().Error("len(segs) != 4")
+		return
+	}
+	if segs[1] != defaultBasePath {
+		LogInstance().Error("segs[1] != defaultBasePath")
+		return
 	}
 
+	groupName := segs[2]
+	key := segs[3]
+	g := GetGroup(groupName)
+	if g == nil {
+		LogInstance().Error("no such group name: " + groupName)
+		return
+	}
+	value, err := g.Get(key)
+	if err != nil {
+		LogInstance().Error("", zap.Error(err))
+		return
+	}
+
+	// 查找成功，返回key对应的value
+	w.Write([]byte(value))
 }

@@ -40,6 +40,7 @@ func GetGroup(name string) *Group {
 	return nil
 }
 
+// Get 在组中查询数据
 func (g *Group) Get(key string) (string, error) {
 	if len(key) == 0 {
 		return "", errors.New("key is null")
@@ -50,4 +51,13 @@ func (g *Group) Get(key string) (string, error) {
 
 	// todo 本地缓存不不存在，需要从peer节点查询
 	return "", errors.New("todo")
+}
+
+// Add 在组中增加/更新数据
+func (g *Group) Add(key, value string) {
+	if len(key) == 0 {
+		LogInstance().Error("key is null")
+		return
+	}
+	g.localCache.Add(key, value)
 }

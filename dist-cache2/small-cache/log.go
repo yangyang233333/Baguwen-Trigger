@@ -2,6 +2,12 @@ package small_cache
 
 import "go.uber.org/zap"
 
-func a() {
-	_, _ = zap.NewProduction()
+var logger *zap.Logger
+
+func init() {
+	logger, _ = zap.NewDevelopment()
+}
+
+func LogInstance() *zap.Logger {
+	return logger
 }

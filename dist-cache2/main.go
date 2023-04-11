@@ -1,15 +1,29 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	sc "small-cache"
+)
 
-type svr int
-
-func (s *svr) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	println(r.URL.Path)
-	w.Write([]byte("你好！"))
+var db = map[string]string{
+	"key_1": "val_1",
+	"key_2": "val_2",
+	"key_3": "val_3",
 }
 
 func main() {
-	var s svr
-	http.ListenAndServe("localhost:8080", &s)
+	selfAddr := "localhost:10086"
+	peers := sc.NewHTTPPool(selfAddr)
+
+	// 插入数据
+	curG := sc.NewGroup("gname", 100)
+	for k, v := range db {
+		curG.Add(k, v)
+	}
+
+	sc.LogInstance().Info("small-cache is listening at " + selfAddr)
+	http.ListenAndServe(selfAddr, peers)
+	// http://localhost:10086/small-cache/gname/key_1
+	// http://localhost:10086/small-cache/gname/key_2
+	// http://localhost:10086/small-cache/gname/key_3
 }
