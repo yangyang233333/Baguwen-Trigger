@@ -1,7 +1,7 @@
-package small_cache
+package group_cache
 
 import (
-	"errors"
+	"common"
 	"sync"
 )
 
@@ -41,22 +41,21 @@ func GetGroup(name string) *Group {
 }
 
 // Get 在组中查询数据
-func (g *Group) Get(key string) (string, error) {
+func (g *Group) Get(key string) (string, bool) {
 	if len(key) == 0 {
-		return "", errors.New("key is null")
+		return "", false
 	}
 	if val, ok := g.localCache.Get(key); ok { // 存在于本地缓存，直接返回即可
-		return val, nil
+		return val, true
 	}
-
-	// todo 本地缓存不不存在，需要从peer节点查询
-	return "", errors.New("todo")
+	// 本地缓存不存在
+	return "", false
 }
 
 // Add 在组中增加/更新数据
 func (g *Group) Add(key, value string) {
 	if len(key) == 0 {
-		LogInstance().Error("key is null")
+		common.LogInstance().Error("key is null")
 		return
 	}
 	g.localCache.Add(key, value)

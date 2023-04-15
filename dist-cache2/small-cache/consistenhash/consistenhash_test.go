@@ -1,4 +1,4 @@
-package chash
+package consistenhash
 
 import (
 	"testing"

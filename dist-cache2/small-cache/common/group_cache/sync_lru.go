@@ -1,21 +1,20 @@
-package small_cache
+package group_cache
 
 import (
-	"small-cache/lru"
 	"sync"
 )
 
 // SyncLRU LRU的并发版本
 type SyncLRU struct {
 	mu       *sync.Mutex
-	lru      *lru.Cache
+	lru      *Cache
 	maxItems int
 }
 
 func NewSyncLRU(maxItems int) *SyncLRU {
 	return &SyncLRU{
 		mu:       &sync.Mutex{},
-		lru:      lru.New(maxItems),
+		lru:      New(maxItems),
 		maxItems: maxItems,
 	}
 }

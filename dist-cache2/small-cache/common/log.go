@@ -1,4 +1,4 @@
-package small_cache
+package common
 
 import "go.uber.org/zap"
 

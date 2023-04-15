@@ -1,4 +1,4 @@
-package lru
+package group_cache
 
 import (
 	"container/list"

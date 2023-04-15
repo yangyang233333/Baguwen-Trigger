@@ -1,0 +1,37 @@
+/*
+在proto同级目录运行一下命令生成代码
+protoc --go_out=. --go_opt=paths=source_relative     --go-grpc_out=
+. --go-grpc_opt=paths=source_relative proto/kvholder.proto
+
+*/
+
+syntax = "proto3";
+option go_package = "google.golang.org/grpc/examples/proto/proto";
+
+
+service KVCacheHolder {
+  // 查询
+  rpc Get(GetRequest) returns (GetReply){}
+
+  // 插入/更新
+  rpc Add(AddRequest) returns (AddReply){}
+}
+
+message GetRequest {
+  string group_name = 1; // 在group_name组中查询
+  string key = 2;        // 查询的key
+}
+
+message GetReply {
+  bool exists = 1;       // 如果查询的字段不存在则为false
+  string value = 2;      // 查询的key
+}
+message AddRequest {
+  string group_name = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message AddReply {
+  bool success = 1; // 插入是否成功
+}
