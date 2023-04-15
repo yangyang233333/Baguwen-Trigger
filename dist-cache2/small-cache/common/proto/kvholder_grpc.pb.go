@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.1
-// source: proto/kvholder.proto
+// source: proxy-proto/kvholder.proxy-proto
 
 package proto
 
@@ -141,5 +141,5 @@ var KVCacheHolder_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/kvholder.proto",
+	Metadata: "proxy-proto/kvholder.proxy-proto",
 }

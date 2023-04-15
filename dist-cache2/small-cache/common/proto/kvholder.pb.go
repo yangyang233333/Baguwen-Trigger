@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: proto/kvholder.proto
+// source: proxy-proto/kvholder.proxy-proto
 
 package proto
 

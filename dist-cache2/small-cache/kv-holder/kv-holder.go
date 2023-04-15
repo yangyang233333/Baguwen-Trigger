@@ -25,6 +25,12 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterKVCacheHolderServer(s, &KVCacheHolder{})
 	common.LogInstance().Info(fmt.Sprintf("server listening at %v", lis.Addr()))
+
+	// 向Proxy进行注册
+	if err := Register("", ProxyAddr); err != nil {
+		common.LogInstance().Info(fmt.Sprintf("failed to register: %v", err))
+	}
+
 	if err := s.Serve(lis); err != nil {
 		common.LogInstance().Info(fmt.Sprintf("failed to serve: %v", err))
 	}
